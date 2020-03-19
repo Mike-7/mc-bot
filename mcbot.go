@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/Tnze/go-mc/bot"
 	"github.com/Tnze/go-mc/chat"
+	"os"
+	"fmt"
 	"log"
 	"time"
 	"net"
@@ -17,11 +19,16 @@ var (
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: mcbot <hostname>")
+		return
+	}
+
 	c = bot.NewClient()
 	c.Name = "Steve [BOT]"
-	addr, port := GetAddrPort("stelmach.aternos.me")
 
 	//Login
+	addr, port := GetAddrPort(os.Args[1])
 	err := c.JoinServer(addr, port)
 	if err != nil {
 		log.Fatal(err)
@@ -42,11 +49,10 @@ func main() {
 }
 
 func GetAddrPort(hostname string) (string, int) {
-	cname, srvs, err := net.LookupSRV("minecraft", "tcp", hostname)
+	_, srvs, err := net.LookupSRV("minecraft", "tcp", hostname)
 	if err != nil {
 		panic(err)
 	}
-	_ = cname
 
 	srv := srvs[0]
 	addr := strings.TrimSuffix(srv.Target, ".")
