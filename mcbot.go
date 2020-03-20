@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const timeout = 5
+const timeout = 10
 
 var (
 	c     *bot.Client
@@ -62,8 +62,10 @@ func GetAddrPort(hostname string) (string, int) {
 }
 
 func onDie() error {
-	c.Respawn()
-	c.Chat("/tp -118.5 58 -139.5")
+	time.AfterFunc(3 * time.Second, func() {
+		c.Respawn()
+		c.Chat("/tp -118.5 58 -139.5")
+	})
 
 	return nil;
 }
