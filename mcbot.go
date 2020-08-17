@@ -14,7 +14,7 @@ import (
 const timeout = 10
 
 var (
-	c     *bot.Client
+	c *bot.Client
 	watch chan time.Time
 )
 
